@@ -1,5 +1,6 @@
 import { FormEventHandler, useState, useRef } from 'react';
 import classes from './auth-form.module.css';
+import { signIn } from 'next-auth/react'
 
 
 const createUser = async (email: string, password: string) => {
@@ -36,6 +37,13 @@ function AuthForm() {
     const enteredPassword = passwordInputRef.current!.value
 
     if (isLogin) {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email:enteredEmail,
+        password: enteredPassword
+      })
+      console.log(result);
+
     } else {
       try {
         const result = await createUser(enteredEmail, enteredPassword)
@@ -48,7 +56,7 @@ function AuthForm() {
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor='email'>Your Email</label>
           <input type='email' id='email' required ref={emailInputRef} />

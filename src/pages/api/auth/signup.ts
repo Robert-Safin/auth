@@ -16,7 +16,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const client = await connectDB();
   const db = client.db();
 
-  const hashedPassoword = hashPassword(password);
+  const existingUser = await db.collection("users").findOne({email:email})
+
+  if (existingUser) {
+    res.status(422).json({message:"user exists already"})
+    client.close()
+    return
+  }
+
+  const hashedPassoword = await hashPassword(password);
 
   const result = await db.collection("users").insertOne({
     email: email,
