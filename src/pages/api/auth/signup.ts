@@ -3,6 +3,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { hashPassword } from "./auth";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== 'POST') {
+    return
+  }
   const data = req.body;
   const { email, password } = data;
   if (!email || !email.includes("@") || !password || password.trim() < 7) {
