@@ -1,4 +1,5 @@
-import ProfileForm from './profile-form';
+
+import ProfileForm from './profle-form'
 import classes from './user-profile.module.css';
 
 function UserProfile() {

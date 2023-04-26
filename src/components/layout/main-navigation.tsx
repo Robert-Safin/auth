@@ -6,9 +6,9 @@ function MainNavigation() {
   return (
     <header className={classes.header}>
       <Link href='/'>
-        <a>
+
           <div className={classes.logo}>Next Auth</div>
-        </a>
+
       </Link>
       <nav>
         <ul>
