@@ -1,9 +1,11 @@
 import { FormEventHandler, useState, useRef } from 'react';
 import classes from './auth-form.module.css';
 import { signIn } from 'next-auth/react'
-
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const createUser = async (email: string, password: string) => {
+
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
@@ -20,7 +22,13 @@ const createUser = async (email: string, password: string) => {
 }
 
 function AuthForm() {
+  const { data: session,status } = useSession()
+  const router = useRouter()
+  const [loading, setLoading] = useState(false);
 
+  if (session) {
+    router.replace('/profile')
+  }
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
@@ -37,12 +45,13 @@ function AuthForm() {
     const enteredPassword = passwordInputRef.current!.value
 
     if (isLogin) {
+      setLoading(true)
       const result = await signIn('credentials', {
         redirect: false,
         email:enteredEmail,
         password: enteredPassword
       })
-      console.log(result);
+
 
     } else {
       try {
@@ -74,6 +83,7 @@ function AuthForm() {
           >
             {isLogin ? 'Create new account' : 'Login with existing account'}
           </button>
+      {loading && <p>Loading...</p> }
         </div>
       </form>
     </section>
