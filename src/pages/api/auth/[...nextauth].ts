@@ -11,21 +11,24 @@ interface Credentials {
 }
 
 
-const  authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_URL,
   session: {
     strategy: 'jwt'
   },
   providers: [
     CredentialsProvider({
-      type: 'credentials',
+
+      name: 'Credentials',
+
       credentials : {},
       async authorize(credentials:Credentials, req:NextApiRequest) {
 
 
-        const client = await connectDB()
-        const usersCollection = client.db().collection("users")
-        const user = await usersCollection.findOne({email: credentials.email})
 
+        const client = await  connectDB()
+        const usersCollection = client.db().collection("users")
+        const user =  await usersCollection.findOne({email: credentials.email})
         if (!user) {
           throw new Error('no user found')
         }
@@ -43,5 +46,4 @@ const  authOptions: NextAuthOptions = {
     })
   ]
 }
-
 export default NextAuth(authOptions)

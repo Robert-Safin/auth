@@ -1,22 +1,27 @@
 
 import ProfileForm from './profle-form'
 import classes from './user-profile.module.css';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 
-function UserProfile() {
+import {FC} from 'react'
+
+const UserProfile:FC = () => {
   // Redirect away if NOT auth
-  // const router = useRouter();
-  // const { data: session,status } = useSession()
 
-  // if (status === "unauthenticated") {
-  //   router.push('/auth');
-  // }
+  const ChangePassword = async(passwordData : {oldPassword:string, newPassword:string}) => {
+    const response = await fetch("api/auth/change-password", {
+      method: "PATCH",
+      body: JSON.stringify(passwordData),
+      headers: {
+        "Content-Type" : "application/json"
+      }
+    })
+
+  }
 
   return (
     <section className={classes.profile}>
       <h1>Your User Profile</h1>
-      <ProfileForm />
+      <ProfileForm onChangePassword={ChangePassword}/>
     </section>
   );
 }

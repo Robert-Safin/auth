@@ -46,6 +46,7 @@ function AuthForm() {
 
     if (isLogin) {
       setLoading(true)
+      console.log("logging in");
       const result = await signIn('credentials', {
         redirect: false,
         email:enteredEmail,
